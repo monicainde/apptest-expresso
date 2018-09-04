@@ -19,7 +19,7 @@ jobs:
             cd AndroidDemo
             ls
             ./gradlew init
-            ./gradlew lint test
+            ./gradlew connectedAndroidTest
 #      - run:
 #          name: Listing DIRNAME
 #          command:
