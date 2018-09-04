@@ -17,6 +17,9 @@ jobs:
           name: Goto Project directory
           command: cd AndroidDemo
       - run:
+          name: Listing DIRNAME
+          command: ls
+      - run:
           name: Init Project
           command: ./gradlew init
 #      - save_cache:
