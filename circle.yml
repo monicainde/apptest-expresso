@@ -5,10 +5,11 @@ machine:
 
   java:
     version: oraclejdk8
-  environment:
-    ANDROID_HOME: /usr/local/android-sdk-linux
 general:
   build_dir: AndroidDemo
+checkout:
+  post:
+    - ls
 test:
   pre:
     # start the emulator
@@ -26,6 +27,3 @@ test:
     - cp -r app/build/outputs $CIRCLE_ARTIFACTS
     - cp -r app/infer-out $CIRCLE_ARTIFACTS
     - cp -r app/build/outputs/androidTest-results/* $CIRCLE_TEST_REPORTS
-deployment:
-  staging:
-    branch: master
