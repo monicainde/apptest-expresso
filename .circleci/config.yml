@@ -14,24 +14,28 @@ jobs:
 #         name: Chmod permissions #if permission for Gradlew Dependencies fail, use this.
 #         command: sudo chmod +x ./gradlew
       - run:
-          name: Goto Project directory
-          command: cd AndroidDemo
-      - run:
-          name: Listing DIRNAME
-          command: ls
-      - run:
-          name: Init Project
-          command: ./gradlew init
+          name: Goto Project directory and Run tests
+          command: |
+            cd AndroidDemo
+            ls
+            ./gradlew init
+            ./gradlew lint test
+#      - run:
+#          name: Listing DIRNAME
+#          command:
+#      - run:
+#          name: Init Project
+#          command: ./gradlew init
 #      - save_cache:
 #          paths:
 #            - ~/.gradle
 #          key: jars-{{ checksum "AndroidDemo/build.gradle" }}-{{ checksum  "AndroidDemo/app/build.gradle" }}
-      - run:
-          name: Run Tests
-          command: ./gradlew lint test
+#      - run:
+#          name: Run Tests
+#          command: ./gradlew lint test
       - store_artifacts:
-          path: app/build/reports
+          path: AndroidDemo/app/build/reports
           destination: reports
       - store_test_results:
-          path: app/build/test-results
+          path: AndroidDemo/app/build/test-results
       # See https://circleci.com/docs/2.0/deployment-integrations/ for deploy examples
