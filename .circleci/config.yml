@@ -9,8 +9,9 @@ jobs:
     steps:
       - checkout
       - run: emulator -list-avds
-      - run: echo no | /opt/android/sdk/tools/bin/avdmanager create avd --force --name testAVD --abi google_apis/x86_64 --package 'system-images;android-23;google_apis;x86_64'
+      - run: echo no | avdmanager create avd --force --name testAVD --abi google_apis/x86_64 --package 'system-images;android-23;google_apis;x86_64'
       - run: emulator -list-avds
+      #/opt/android/sdk/tools/bin/avdmanager
 #      - run:
 #          name: "Got To Project and connectedAndroidTest"
 #            command: |
