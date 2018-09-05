@@ -8,17 +8,20 @@ jobs:
       JVM_OPTS: -Xmx3200m
     steps:
       - checkout
-      - emulator -avd circleci-android24 -no-window:
+    test:
+      override:
+        # start the emulator
+        - emulator -avd circleci-android24 -no-window:
             background: true
             parallel: true
         # wait for it to have booted
-      - circle-android wait-for-boot
-      # run tests  against the emulator.
-      - AndroidDemo/./gradlew connectedAndroidTest
-      # copy the build outputs to artifacts
-      - cp -r AndroidDemo/build/outputs $CIRCLE_ARTIFACTS
-      # copy the test results to the test results directory.
-      - cp -r AndroidDemo/build/outputs/androidTest-results/* $CIRCLE_TEST_REPORTS
+        - circle-android wait-for-boot
+        # run tests  against the emulator.
+        - AndroidDemo/./gradlew connectedAndroidTest
+        # copy the build outputs to artifacts
+        - cp -r AndroidDemo/build/outputs $CIRCLE_ARTIFACTS
+        # copy the test results to the test results directory.
+        - cp -r AndroidDemo/build/outputs/androidTest-results/* $CIRCLE_TEST_REPORTS
 #      - run:
 #          name: Goto Project directory and Run tests
 #          command: |
