@@ -20,13 +20,13 @@ jobs:
 #            background: true
 #            parallel: true
         # wait for it to have booted
-      - circle-android wait-for-boot
+#      - circle-android wait-for-boot
       # run tests  against the emulator.
-      - AndroidDemo/./gradlew connectedAndroidTest
+#      - AndroidDemo/./gradlew connectedAndroidTest
       # copy the build outputs to artifacts
-      - cp -r AndroidDemo/build/outputs $CIRCLE_ARTIFACTS
+#      - cp -r AndroidDemo/build/outputs $CIRCLE_ARTIFACTS
       # copy the test results to the test results directory.
-      - cp -r AndroidDemo/build/outputs/androidTest-results/* $CIRCLE_TEST_REPORTS
+#      - cp -r AndroidDemo/build/outputs/androidTest-results/* $CIRCLE_TEST_REPORTS
 #      - store_artifacts:
 #          path: AndroidDemo/app/build/reports
 #          destination: reports
