@@ -8,13 +8,13 @@ jobs:
       JVM_OPTS: -Xmx3200m
     steps:
       - checkout
-      - run:
-          name: "Got To Project and connectedAndroidTest"
-            command: |
-              cd AndroidDemo
-              ls
-              ./gradlew init
-             ./gradlew connectedAndroidTest
+#      - run:
+#          name: "Got To Project and connectedAndroidTest"
+#            command: |
+#              cd AndroidDemo
+#              ls
+#              ./gradlew init
+#             ./gradlew connectedAndroidTest
       - emulator -avd circleci-android24 -no-window:
           name: Open Emulator
             background: true
