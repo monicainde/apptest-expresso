@@ -8,7 +8,7 @@ jobs:
       JVM_OPTS: -Xmx3200m
     steps:
       - checkout
-      - run: emulator -list-avds
+      - run: echo $ANDROID_HOME
       - run: echo no | avdmanager create avd --force --name testAVD --abi google_apis/x86_64 --package 'system-images;android-23;google_apis;x86_64'
       - run: emulator -list-avds
       #/opt/android/sdk/tools/bin/avdmanager
