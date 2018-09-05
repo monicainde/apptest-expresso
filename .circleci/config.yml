@@ -9,7 +9,7 @@ jobs:
     steps:
       - checkout
       - run:
-          name: Goto Project directory and Run tests
+          name: "Got To Project and connectedAndroidTest"
             command: |
               cd AndroidDemo
               ls
