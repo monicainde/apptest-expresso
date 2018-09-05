@@ -8,6 +8,7 @@ jobs:
       JVM_OPTS: -Xmx3200m
     steps:
       - checkout
+      - run: emulator -list-avds
 #      - run:
 #          name: "Got To Project and connectedAndroidTest"
 #            command: |
@@ -15,7 +16,7 @@ jobs:
 #              ls
 #              ./gradlew init
 #             ./gradlew connectedAndroidTest
-      - emulator -avd circleci-android21 -no-window
+#      - emulator -avd circleci-android21 -no-window
 #            background: true
 #            parallel: true
         # wait for it to have booted
