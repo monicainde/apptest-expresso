@@ -1,12 +1,12 @@
 package com.mytaxi.android_demo.Tests;
 
+import android.Manifest;
 import android.support.test.filters.LargeTest;
 import android.support.test.rule.ActivityTestRule;
-import android.support.test.uiautomator.UiDevice;
+import android.support.test.rule.GrantPermissionRule;
 
 import com.mytaxi.android_demo.Pages.LogInPage;
 import com.mytaxi.android_demo.Pages.SearchPage;
-
 import com.mytaxi.android_demo.activities.MainActivity;
 
 import org.junit.After;
@@ -19,14 +19,11 @@ import org.junit.runners.Parameterized;
 import java.util.Arrays;
 import java.util.Collection;
 
-import static android.support.test.InstrumentationRegistry.getInstrumentation;
-
 @RunWith(Parameterized.class)
 @LargeTest
 public class DriverActivityTests extends BaseTests {
     private String DRIVER_NAME;
     private String DRIVER_NUMBER;
-    private UiDevice mDevice = UiDevice.getInstance(getInstrumentation());
     private LogInPage logInPage;
     private SearchPage searchPage;
 
@@ -45,9 +42,8 @@ public class DriverActivityTests extends BaseTests {
         searchPage = new SearchPage();
     }
 
-    @Rule
-    public ActivityTestRule<MainActivity> mActivityRule = new ActivityTestRule<>(
-            MainActivity.class);
+    @Rule public GrantPermissionRule permissionRule = GrantPermissionRule.grant(Manifest.permission.ACCESS_FINE_LOCATION);
+    @Rule public ActivityTestRule<MainActivity> mActivityRule = new ActivityTestRule<>(MainActivity.class);
 
     @Before
     public void initialSetUp(){
@@ -59,8 +55,13 @@ public class DriverActivityTests extends BaseTests {
         logInPage.appLogOut();
     }
 
+    @Test
+    public void logInAndPartialSearchDriver() {
+        logInPage.appLogIn("crazydog335","venture");
+        searchPage.partialSearchDriver(DRIVER_NAME,DRIVER_NUMBER,mActivityRule);
+    }
 
-
+    //Test to search full drivername
     @Test
     public void logInAndSearchDriver() {
         logInPage.appLogIn("crazydog335","venture");

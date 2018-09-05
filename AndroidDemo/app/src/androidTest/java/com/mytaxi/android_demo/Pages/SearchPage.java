@@ -24,25 +24,49 @@ import static org.junit.Assert.assertThat;
 
 public class SearchPage {
     private UiDevice mDevice = UiDevice.getInstance(getInstrumentation());
-    public void searchDriver(String DRIVER_NAME, String DRIVER_NUMBER, ActivityTestRule<MainActivity> mActivityRule) {
-        // Type text and then press the search button.
+    public void partialSearchDriver(String DRIVER_NAME, String DRIVER_NUMBER, ActivityTestRule<MainActivity> mActivityRule) {
+        //shortening search string to load hints - partial search string
         String driverSearchString= DRIVER_NAME.substring(0,2).toLowerCase();
-        onView(ViewMatchers.withId(R.id.textSearch))
-                .perform(typeText(driverSearchString), closeSoftKeyboard());
 
-        //select the 2nd result (via the name) from the list
-        onView(withText(DRIVER_NAME))
-                .inRoot(withDecorView(not(is(mActivityRule.getActivity().getWindow().getDecorView()))))
-                .perform(click());
-        //Click on Call Button
-        onView(withId(R.id.fab))
-                .perform(click());
+        // Type text and then press the call button.
+        enterDriverNameToSearch(driverSearchString);
+        selectDriverAndCall(DRIVER_NAME,DRIVER_NUMBER,mActivityRule);
+    }
+
+    public void searchDriver(String DRIVER_NAME, String DRIVER_NUMBER, ActivityTestRule<MainActivity> mActivityRule) {
+        // Type text and then press the call button.
+        enterDriverNameToSearch(DRIVER_NAME);
+        selectDriverAndCall(DRIVER_NAME,DRIVER_NUMBER,mActivityRule);
+    }
+
+    public void selectDriverAndCall(String DRIVER_NAME, String DRIVER_NUMBER, ActivityTestRule<MainActivity> mActivityRule){
+        selectSearchResultByText(DRIVER_NAME,mActivityRule);
+        callDriver();
+
         //Test Assertion - Validate that the driver's number is dialed on the screen
         UiObject dialedNumberTextelement = mDevice.findObject(new UiSelector().text(DRIVER_NUMBER));
         assertThat(dialedNumberTextelement.exists(), equalTo(true));
 
         //come back to the main app, from contacts app
         goBackToAppHome();
+    }
+
+    public void enterDriverNameToSearch(String driverSearchString) {
+        onView(ViewMatchers.withId(R.id.textSearch))
+                .perform(typeText(driverSearchString), closeSoftKeyboard());
+    }
+
+    public void selectSearchResultByText(String DRIVER_NAME, ActivityTestRule<MainActivity> mActivityRule) {
+        //select the 2nd result (via the name) from the list
+        onView(withText(DRIVER_NAME))
+                .inRoot(withDecorView(not(is(mActivityRule.getActivity().getWindow().getDecorView()))))
+                .perform(click());
+    }
+
+    public void callDriver() {
+        //Click on Call Button
+        onView(withId(R.id.fab))
+                .perform(click());
     }
 
     public void goBackToAppHome() {

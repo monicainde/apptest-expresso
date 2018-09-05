@@ -1,0 +1,10 @@
+Two buttons overlaying on map down-right corner - on click of the mytaxi pin on the map
+Map is not loaded properly
+Username is in white text making it unreadable
+driver search history
+the user has to remember the name of the driver
+The driver profile information is not self explanatory e.g. the calendar icon and date is not clear enough as to what the date is about
+on click of location of the driver, it should navigate on the map.
+The driver profile looks completely disconnected from the home page - the drawer layout is not displayed on driver profile page - user has to press back  then click on drawer to logout.
+no user edit/details page - setting the password etc
+Search is only available for first name - i.e.driver name starts with - no contains or ends with conditions available.

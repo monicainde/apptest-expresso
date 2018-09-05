@@ -1,7 +1,9 @@
 package com.mytaxi.android_demo.Tests;
 
+import android.Manifest;
 import android.support.test.filters.LargeTest;
 import android.support.test.rule.ActivityTestRule;
+import android.support.test.rule.GrantPermissionRule;
 
 import com.mytaxi.android_demo.Pages.LogInPage;
 import com.mytaxi.android_demo.activities.MainActivity;
@@ -38,10 +40,8 @@ public class LogInTests extends BaseTests{
         });
     }
 
-    @Rule
-    public ActivityTestRule<MainActivity> mActivityRule = new ActivityTestRule<>(
-            MainActivity.class);
-
+    @Rule public GrantPermissionRule permissionRule = GrantPermissionRule.grant(Manifest.permission.ACCESS_FINE_LOCATION);
+    @Rule public ActivityTestRule<MainActivity> mActivityRule = new ActivityTestRule<>(MainActivity.class);
 
     @Before
     public void beforeEachTest() {
