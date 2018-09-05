@@ -15,7 +15,7 @@ jobs:
 #              ls
 #              ./gradlew init
 #             ./gradlew connectedAndroidTest
-      - emulator -avd circleci-android24 -no-window:
+      - emulator -avd circleci-android21 -no-window:
             background: true
             parallel: true
         # wait for it to have booted
