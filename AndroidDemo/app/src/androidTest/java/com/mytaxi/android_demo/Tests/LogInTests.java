@@ -4,7 +4,6 @@ import android.support.test.espresso.contrib.DrawerActions;
 import android.support.test.espresso.matcher.ViewMatchers;
 import android.support.test.filters.LargeTest;
 import android.support.test.rule.ActivityTestRule;
-import android.support.test.runner.AndroidJUnit4;
 import android.support.test.uiautomator.UiDevice;
 import android.support.test.uiautomator.UiObject;
 import android.support.test.uiautomator.UiObjectNotFoundException;
@@ -13,6 +12,7 @@ import android.support.test.uiautomator.UiSelector;
 import com.mytaxi.android_demo.R;
 import com.mytaxi.android_demo.activities.MainActivity;
 
+import org.junit.After;
 import org.junit.Before;
 import org.junit.Rule;
 import org.junit.Test;
@@ -37,7 +37,7 @@ import static org.hamcrest.CoreMatchers.is;
 import static org.hamcrest.core.IsNot.not;
 import static org.junit.Assert.assertThat;
 
-@RunWith(AndroidJUnit4.class)
+@RunWith(Parameterized.class)
 @LargeTest
 public class LogInTests {
     private String USERNAME;
@@ -48,12 +48,13 @@ public class LogInTests {
         this.USERNAME = username;
         this.PASSWORD = password;
     }
+    @Parameterized.Parameters
+    public static Collection<Object[]> data() {
+        return Arrays.asList(new Object[][] {
+                { "crazydog335", "venture" }
+        });
+    }
 
-    /*
-    public LogInTests(){
-        this.USERNAME = "crazydog335";
-        this.PASSWORD = "venture";
-    }*/
 
     @Rule
     public ActivityTestRule<MainActivity> mActivityRule = new ActivityTestRule<>(
@@ -84,14 +85,14 @@ public class LogInTests {
                 .perform(typeText(PASSWORD), closeSoftKeyboard());
         onView(withId(R.id.btn_login)).perform(click());
 
-        //Sometime the login takes too long and landing page does not load immediately, waitForId will wait till textSearch is loaded.
-        onView(isRoot()).perform(WaitHelper.waitForId(R.id.textSearch, TimeUnit.SECONDS.toMillis(10)));
+        //Sometime the login takes too long and landing page does not load immediately, waitFor will wait till textSearch is loaded.
+        onView(isRoot()).perform(WaitHelper.waitFor(TimeUnit.SECONDS.toMillis(10)));
 
         // Check that landing page is loaded
         onView(withId(R.id.textSearch)).check(matches(isDisplayed()));
     }
 
-    @Test
+    @After
     public void logOut() {
         //Open the drawer and hit logout
         onView(withId(R.id.drawer_layout)).perform(DrawerActions.open());
