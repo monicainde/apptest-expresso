@@ -8,7 +8,6 @@ import android.support.test.uiautomator.UiObject;
 import android.support.test.uiautomator.UiSelector;
 
 import com.mytaxi.android_demo.R;
-import com.mytaxi.android_demo.Tests.LogInTests;
 
 import com.mytaxi.android_demo.activities.MainActivity;
 
