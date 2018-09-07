@@ -86,8 +86,9 @@ public class MainActivity extends AuthenticatedActivity
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
         idlingResource.increment();
+        super.onCreate(savedInstanceState);
+
         loadInstanceState(savedInstanceState);
         setContentView(R.layout.activity_main);
         // Obtain the SupportMapFragment and get notified when the map is ready to be used.
@@ -204,6 +205,7 @@ public class MainActivity extends AuthenticatedActivity
      * cases when a location is not available.
      */
         try {
+            idlingResource.increment();
             if (mPermissionHelper.isLocationPermissionGranted()) {
                 Task locationResult = mFusedLocationProviderClient.getLastLocation();
                 locationResult.addOnCompleteListener(this, new OnCompleteListener() {
@@ -218,6 +220,7 @@ public class MainActivity extends AuthenticatedActivity
                             mMap.addMarker(new MarkerOptions().position(DEFAULT_LOCATION).draggable(true).icon(mIconMarker));
                             mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(DEFAULT_LOCATION, DEFAULT_ZOOM));
                         }
+                        idlingResource.decrement();
                     }
                 });
             }

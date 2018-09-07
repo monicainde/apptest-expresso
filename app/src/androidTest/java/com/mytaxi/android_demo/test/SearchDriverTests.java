@@ -6,9 +6,9 @@ import android.support.test.filters.LargeTest;
 import android.support.test.rule.ActivityTestRule;
 import android.support.test.rule.GrantPermissionRule;
 
-import com.mytaxi.android_demo.test.pages.LogInPage;
-import com.mytaxi.android_demo.test.pages.SearchPage;
+import com.mytaxi.android_demo.R;
 import com.mytaxi.android_demo.activities.MainActivity;
+import com.mytaxi.android_demo.test.pages.SearchPage;
 
 import org.junit.After;
 import org.junit.Before;
@@ -19,6 +19,11 @@ import org.junit.runners.Parameterized;
 
 import java.util.Arrays;
 import java.util.Collection;
+
+import static android.support.test.espresso.Espresso.onView;
+import static android.support.test.espresso.assertion.ViewAssertions.matches;
+import static android.support.test.espresso.matcher.ViewMatchers.isDisplayed;
+import static android.support.test.espresso.matcher.ViewMatchers.withId;
 
 @RunWith(Parameterized.class)
 @LargeTest
@@ -48,6 +53,7 @@ public class SearchDriverTests extends BaseTests {
     public void setUp(){
         Espresso.registerIdlingResources(mActivityRule.getActivity().getIdlingResource());
         logInPage.appLogIn("crazydog335","venture");
+        onView(withId(R.id.textSearch)).check(matches(isDisplayed()));
     }
 
     @Test
