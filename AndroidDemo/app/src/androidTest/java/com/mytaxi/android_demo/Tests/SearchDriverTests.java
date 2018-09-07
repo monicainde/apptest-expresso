@@ -1,12 +1,13 @@
 package com.mytaxi.android_demo.Tests;
 
 import android.Manifest;
+import android.support.test.espresso.Espresso;
 import android.support.test.filters.LargeTest;
 import android.support.test.rule.ActivityTestRule;
 import android.support.test.rule.GrantPermissionRule;
 
-import com.mytaxi.android_demo.Pages.LogInPage;
-import com.mytaxi.android_demo.Pages.SearchPage;
+import com.mytaxi.android_demo.Tests.pages.LogInPage;
+import com.mytaxi.android_demo.Tests.pages.SearchPage;
 import com.mytaxi.android_demo.activities.MainActivity;
 
 import org.junit.After;
@@ -21,7 +22,7 @@ import java.util.Collection;
 
 @RunWith(Parameterized.class)
 @LargeTest
-public class DriverActivityTests extends BaseTests {
+public class SearchDriverTests extends BaseTests {
     private String DRIVER_NAME;
     private String DRIVER_NUMBER;
     private LogInPage logInPage;
@@ -35,7 +36,7 @@ public class DriverActivityTests extends BaseTests {
     }
 
     //Constructor
-    public DriverActivityTests(String driverName, String driverNumber){
+    public SearchDriverTests(String driverName, String driverNumber){
         this.DRIVER_NAME = driverName;
         this.DRIVER_NUMBER = driverNumber;
         logInPage = new LogInPage();
@@ -50,13 +51,9 @@ public class DriverActivityTests extends BaseTests {
         setup();
     }
 
-    @After
-    public void tearDown(){
-        logInPage.appLogOut();
-    }
-
     @Test
     public void logInAndPartialSearchDriver() {
+        Espresso.registerIdlingResources(mActivityRule.getActivity().getIdlingResource());
         logInPage.appLogIn("crazydog335","venture");
         searchPage.partialSearchDriver(DRIVER_NAME,DRIVER_NUMBER,mActivityRule);
     }
@@ -64,8 +61,14 @@ public class DriverActivityTests extends BaseTests {
     //Test to search full drivername
     @Test
     public void logInAndSearchDriver() {
+        Espresso.registerIdlingResources(mActivityRule.getActivity().getIdlingResource());
         logInPage.appLogIn("crazydog335","venture");
         searchPage.searchDriver(DRIVER_NAME,DRIVER_NUMBER,mActivityRule);
     }
 
+    @After
+    public void tearDown(){
+        logInPage.appLogOut();
+        Espresso.unregisterIdlingResources(mActivityRule.getActivity().getIdlingResource());
+    }
 }

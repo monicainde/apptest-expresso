@@ -6,6 +6,8 @@ import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.NavigationView;
+import android.support.test.espresso.IdlingResource;
+import android.support.test.espresso.idling.CountingIdlingResource;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
@@ -58,6 +60,8 @@ public class MainActivity extends AuthenticatedActivity
     @Inject
     SharedPrefStorage mSharedPrefStorage;
 
+    CountingIdlingResource idlingResource = new CountingIdlingResource("DATA_LOADER");
+
     private GoogleMap mMap;
     private FusedLocationProviderClient mFusedLocationProviderClient;
     private BitmapDescriptor mIconMarker;
@@ -68,18 +72,22 @@ public class MainActivity extends AuthenticatedActivity
     @Override
     protected void onResume() {
         super.onResume();
+
         if (!isAuthenticated()) {
             startActivity(AuthenticationActivity.createIntent(MainActivity.this));
         } else {
+            idlingResource.increment();
             DrawerLayout drawer = findViewById(R.id.drawer_layout);
             NavigationView nav = drawer.findViewById(R.id.nav_view);
             ((TextView) nav.getHeaderView(0).findViewById(R.id.nav_username)).setText(mSharedPrefStorage.loadUser().getUsername());
+            idlingResource.decrement();
         }
     }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        idlingResource.increment();
         loadInstanceState(savedInstanceState);
         setContentView(R.layout.activity_main);
         // Obtain the SupportMapFragment and get notified when the map is ready to be used.
@@ -111,7 +119,7 @@ public class MainActivity extends AuthenticatedActivity
 
         NavigationView navigationView = findViewById(R.id.nav_view);
         navigationView.setNavigationItemSelectedListener(this);
-
+        idlingResource.decrement();
         mSearchView = findViewById(R.id.textSearch);
         mSearchView.setDropDownAnchor(R.id.searchContainer);
         mHttpClient.fetchDrivers(new HttpClient.DriverCallback() {
@@ -245,6 +253,13 @@ public class MainActivity extends AuthenticatedActivity
         if (savedInstanceState != null) {
             mLastKnownLocation = savedInstanceState.getParcelable(KEY_LOCATION);
         }
+    }
+
+    public IdlingResource getIdlingResource() {
+        if (idlingResource == null) {
+            idlingResource = new CountingIdlingResource("DATA_LOADER");
+        }
+        return idlingResource;
     }
 
 }
