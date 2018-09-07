@@ -1,4 +1,4 @@
-package com.mytaxi.android_demo.Tests.utils;
+package com.mytaxi.android_demo.test.utils;
 
 
 import android.support.test.espresso.UiController;

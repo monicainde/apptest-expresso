@@ -1,4 +1,4 @@
-package com.mytaxi.android_demo.Tests.pages;
+package com.mytaxi.android_demo.test.pages;
 
 import android.support.test.espresso.matcher.ViewMatchers;
 import android.support.test.rule.ActivityTestRule;

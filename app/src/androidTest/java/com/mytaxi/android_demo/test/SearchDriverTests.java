@@ -1,4 +1,4 @@
-package com.mytaxi.android_demo.Tests;
+package com.mytaxi.android_demo.test;
 
 import android.Manifest;
 import android.support.test.espresso.Espresso;
@@ -6,8 +6,8 @@ import android.support.test.filters.LargeTest;
 import android.support.test.rule.ActivityTestRule;
 import android.support.test.rule.GrantPermissionRule;
 
-import com.mytaxi.android_demo.Tests.pages.LogInPage;
-import com.mytaxi.android_demo.Tests.pages.SearchPage;
+import com.mytaxi.android_demo.test.pages.LogInPage;
+import com.mytaxi.android_demo.test.pages.SearchPage;
 import com.mytaxi.android_demo.activities.MainActivity;
 
 import org.junit.After;
