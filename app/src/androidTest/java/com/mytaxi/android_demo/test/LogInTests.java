@@ -25,13 +25,10 @@ import java.util.Collection;
 public class LogInTests extends BaseTests{
     private String USERNAME;
     private String PASSWORD;
-    private LogInPage logInPage;
-
 
     public LogInTests(String username, String password){
         this.USERNAME = username;
         this.PASSWORD = password;
-        this.logInPage = new LogInPage();
     }
 
     @Parameterized.Parameters
@@ -46,19 +43,18 @@ public class LogInTests extends BaseTests{
 
     @Before
     public void beforeEachTest() {
-        setup();
+        Espresso.registerIdlingResources(mActivityRule.getActivity().getIdlingResource());
     }
 
     @Test
     public void logIn() {
-        Espresso.registerIdlingResources(mActivityRule.getActivity().getIdlingResource());
         // From Page-class: Type username/password and then press the log in button & Verify.
         logInPage.appLogIn(USERNAME,PASSWORD);
     }
 
     @After
     public void logOut() {
-        logInPage.appLogOut();
+        tearDown();
         Espresso.unregisterIdlingResources(mActivityRule.getActivity().getIdlingResource());
     }
 

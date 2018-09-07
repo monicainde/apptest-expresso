@@ -25,7 +25,6 @@ import java.util.Collection;
 public class SearchDriverTests extends BaseTests {
     private String DRIVER_NAME;
     private String DRIVER_NUMBER;
-    private LogInPage logInPage;
     private SearchPage searchPage;
 
     @Parameterized.Parameters
@@ -39,7 +38,6 @@ public class SearchDriverTests extends BaseTests {
     public SearchDriverTests(String driverName, String driverNumber){
         this.DRIVER_NAME = driverName;
         this.DRIVER_NUMBER = driverNumber;
-        logInPage = new LogInPage();
         searchPage = new SearchPage();
     }
 
@@ -47,28 +45,27 @@ public class SearchDriverTests extends BaseTests {
     @Rule public ActivityTestRule<MainActivity> mActivityRule = new ActivityTestRule<>(MainActivity.class);
 
     @Before
-    public void initialSetUp(){
-        setup();
+    public void setUp(){
+        Espresso.registerIdlingResources(mActivityRule.getActivity().getIdlingResource());
+        logInPage.appLogIn("crazydog335","venture");
     }
 
     @Test
     public void logInAndPartialSearchDriver() {
-        Espresso.registerIdlingResources(mActivityRule.getActivity().getIdlingResource());
-        logInPage.appLogIn("crazydog335","venture");
         searchPage.partialSearchDriver(DRIVER_NAME,DRIVER_NUMBER,mActivityRule);
     }
 
-    //Test to search full drivername
+    /*
+     Test to search full drivername
+    * */
     @Test
     public void logInAndSearchDriver() {
-        Espresso.registerIdlingResources(mActivityRule.getActivity().getIdlingResource());
-        logInPage.appLogIn("crazydog335","venture");
         searchPage.searchDriver(DRIVER_NAME,DRIVER_NUMBER,mActivityRule);
     }
 
     @After
-    public void tearDown(){
-        logInPage.appLogOut();
+    public void cleanUp(){
+        tearDown();
         Espresso.unregisterIdlingResources(mActivityRule.getActivity().getIdlingResource());
     }
 }
