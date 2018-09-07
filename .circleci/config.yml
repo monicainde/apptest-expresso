@@ -1,41 +1,48 @@
 version: 2
 jobs:
   build:
-    working_directory: ~/code
     docker:
-      - image: circleci/android:api-25-alpha
+      # Android the primary container
+      - image: circleci/android:api-27-alpha
     environment:
       JVM_OPTS: -Xmx3200m
     steps:
       - checkout
+      - restore_cache:
+          key: jars-{{ checksum "build.gradle" }}-{{ checksum  "app/build.gradle" }}
       - run:
+          name: chmod permissions
+          command: chmod +x ./gradlew
+      - run:
+          name: Download Dependencies
+          command: ./gradlew androidDependencies
+      - save_cache:
+          paths:
+            - ~/.gradle
+          key: jars-{{ checksum "build.gradle" }}-{{ checksum  "app/build.gradle" }}
+      - run:
+          name: Run UnitTest
+          command: ./gradlew test
+      - run:
+          name: Setup emulator
+          command: sdkmanager "system-images;android-21;default;armeabi-v7a" && echo "no" | avdmanager create avd -n test -k "system-images;android-21;default;armeabi-v7a"
+      - run:
+          name: Launch emulator
+          command: export LD_LIBRARY_PATH=${ANDROID_HOME}/emulator/lib64:${ANDROID_HOME}/emulator/lib64/qt/lib && emulator64-arm -avd test -noaudio -no-boot-anim -no-window -accel auto -verbose
+          background: true
+      - run:
+          name: Wait emulator
           command: |
-            cd $ANDROID_HOME/tools/bin
-            ls -ls
-      - run: sudo echo no | $ANDROID_HOME/tools/bin/avdmanager create avd --force --name testAVD --abi google_apis/x86_64 --package 'system-images;android-23;google_apis;x86_64'
-      - run: emulator -list-avds
-      #/opt/android/sdk/tools/bin/avdmanager
-#      - run:
-#          name: "Got To Project and connectedAndroidTest"
-#            command: |
-#              cd AndroidDemo
-#              ls
-#              ./gradlew init
-#             ./gradlew connectedAndroidTest
-#      - emulator -avd circleci-android21 -no-window
-#            background: true
-#            parallel: true
-        # wait for it to have booted
-#      - circle-android wait-for-boot
-      # run tests  against the emulator.
-#      - AndroidDemo/./gradlew connectedAndroidTest
-      # copy the build outputs to artifacts
-#      - cp -r AndroidDemo/build/outputs $CIRCLE_ARTIFACTS
-      # copy the test results to the test results directory.
-#      - cp -r AndroidDemo/build/outputs/androidTest-results/* $CIRCLE_TEST_REPORTS
-#      - store_artifacts:
-#          path: AndroidDemo/app/build/reports
-#          destination: reports
-#      - store_test_results:
-#          path: AndroidDemo/app/build/test-results
-      # See https://circleci.com/docs/2.0/deployment-integrations/ for deploy examples
+            # wait for it to have booted
+            circle-android wait-for-boot
+            # unlock the emulator screen
+            sleep 30
+            adb shell input keyevent 82
+      - run:
+          name: Run EspressoTests
+          command: ./gradlew app:connectedAndroidTest --stacktrace
+      - store_artifacts:
+          path: app/build/reports
+          destination: reports
+      - store_test_results:
+          path: app/build/test-results
